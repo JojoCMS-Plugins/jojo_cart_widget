@@ -28,7 +28,7 @@ function cartWidgetEmpty(e) {
         data = $('.cartwidget input, .cartwidget select').serializeArray();
         data[data.length] = {name: 'empty', value: "Empty cart" };
         /* Get the page in the background the reload this page */
-        $.get(this.href, {}, function() {jojo_cart_widget_update(data); });
+        jojo_cart_widget_update(data);
         /* Don't go to the cart page */
         return false;
 }

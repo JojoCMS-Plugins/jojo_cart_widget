@@ -1,4 +1,4 @@
-<div class="shoppingcart">
+{if !$json}<div class="shoppingcart">{/if}
 <form class="cartwidget" method="post" action="{$SITEURL}/cart/">
 {if $cartisempty}
     Your shopping cart is empty.
@@ -51,6 +51,4 @@
     <h4 class="links">&gt; <a href="{$SITEURL}/cart/checkout">Go to Checkout</a></h4>
 {/if}
 </form>
-</div>
-
-
+{if !$json}</div>{/if}

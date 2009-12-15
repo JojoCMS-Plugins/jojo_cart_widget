@@ -30,7 +30,7 @@ class jojo_plugin_jojo_cart_widget extends JOJO_Plugin
     /**
      * Returns the html content of the widget
      */
-    function getWidgetContent()
+    function getWidgetContent($json)
     {
         global $smarty;
 
@@ -63,6 +63,7 @@ class jojo_plugin_jojo_cart_widget extends JOJO_Plugin
             $smarty->assign('cartisempty', true);
         }
 
+        $smarty->assign('json', isset($json));
         return $smarty->fetch('jojo_cart_widget.tpl');
     }
 }

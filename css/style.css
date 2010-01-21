@@ -1,24 +1,23 @@
 a.widget-remove {
-line-height:14px;
-color:red;
-font-size:115%;
-margin:0px;
+  line-height: 14px;
+  color: red;
+  font-size: 115%;
+  margin: 0;
 }
 
 #cart-widget-total {
-    text-align:right;
-    padding-right:5px;
-    margin-bottom:5px;
-    font-weight: bold;
-
+  text-align: right;
+  padding-right: 5px;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 input.cart-widget-quantity {
-    padding: 0;
-    width: 13px;
+  padding: 0;
+  width: 13px;
 }
 
 #cart-widget-buttons {
-    text-align: center;
-    margin-bottom:5px;
+  text-align: center;
+  margin-bottom: 5px;
 }

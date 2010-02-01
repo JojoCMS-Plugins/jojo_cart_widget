@@ -11,6 +11,7 @@
           <th>Qty</th>
           <th>Price</th>
           <th>Total</th>
+          <th>&nbsp;</th>
         </tr>
         {foreach from=$items key=k item=i}
         <tr>

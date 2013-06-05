@@ -19,7 +19,7 @@ class jojo_plugin_jojo_cart_widget extends JOJO_Plugin
     /**
      * Filter to Insert the cart widget into the page output
      */
-    function cart_widget($content)
+    static function cart_widget($content)
     {
         if (strpos($content, '[[shopping_cart]]') === false) {
             return $content;
@@ -30,7 +30,7 @@ class jojo_plugin_jojo_cart_widget extends JOJO_Plugin
     /**
      * Returns the html content of the widget
      */
-    function getWidgetContent($json='')
+    static function getWidgetContent($json='')
     {
         global $smarty;
 
@@ -44,8 +44,12 @@ class jojo_plugin_jojo_cart_widget extends JOJO_Plugin
                 $linetotals[] = $i['linetotal'];
             }
             $total = array_sum($linetotals);
-            $smarty->assign('items', $cart->items);
             $smarty->assign('total', $total);
+            
+            $smarty->assign('numprods', count($cart->items));
+            $smarty->assign('numitems',  call_user_func(array(Jojo_Cart_Class, 'getNumItems'), $cart->items));
+
+            $smarty->assign('items', $cart->items);
             $currency = call_user_func(array(Jojo_Cart_Class, 'getCartCurrency'));
             $smarty->assign('currency', $currency);
             $smarty->assign('currencysymbol', call_user_func(array(Jojo_Cart_Class, 'getCurrencySymbol'), $currency));

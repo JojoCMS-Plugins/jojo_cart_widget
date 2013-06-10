@@ -5,7 +5,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
 /* Add to cart */
 foreach(Jojo::getFormData('add', array()) as $id => $add) {
-    call_user_func(array(Jojo_Cart_Class, 'addToCart'), $id);
+    call_user_func(array(Jojo_Cart_Class, 'addToCart'), $id, ($add ? $add : 1));
 }
 
 /* Update Quantities */

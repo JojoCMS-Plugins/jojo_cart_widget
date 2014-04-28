@@ -32,6 +32,8 @@ if (Jojo::getFormData('discountcode')) {
 $html = str_replace(array("\n", "\r", '  '), '', jojo_plugin_Jojo_cart_widget::getWidgetContent('json'));
 $html = preg_replace("#<script type='text\/javascript'>(.*)</script>#isU", '', $html);
 $html = Jojo::applyFilter('content',$html );
+$html = Jojo::applyFilter('output', $html);
+$html = str_replace('##', '', $html);
 $res = json_encode($html);
 header('Content-Length: ' . strlen($res));
 echo $res;

@@ -45,19 +45,32 @@ function cartWidgetUpdate(e) {
 
 function jojo_cart_widget_update(data) {
     $('.shoppingcart').html('<img src="images/ajax-loader.gif" alt="Updating"/>');
-
     $.post('json/jojo_cart_widget.php', data,
             function(data) {
-                if (!$('.shoppingcart').length) {
-                    window.location.href=window.location.href;
+               if ($('.cartItemTotal').length>0) {
+                    $.post('json/cart_item_total_update.php', data,
+                        function(data) {
+                                $('.cartItemTotal').html(data[0]);
+                                $('.cartTotal').html(data[1]);
+                        },
+                        "json"
+                    );
+                    
                 }
-                $('.shoppingcart').html(data);
+                if ($('.shoppingcart').length>0) {
+                    $('.shoppingcart').html(data);
+                }
                 $('.cartwidget').unbind('submit');
                 $('.cartwidget').bind('submit', cartWidgetSubmit);
                 $('#emptycart').bind('click', cartWidgetEmpty);
                 $('#updatecart').bind('click', cartWidgetUpdate);
                 $("#updatelink").hide();
-            }, "json");
+                $('input.cart-widget-quantity').keyup(function(){ $('form.cartwidget').submit(); });
+                $('select.cart-widget-quantity').change(function(){ $('form.cartwidget').submit(); });
+ 
+            },
+            "json"
+    );
 }
 
 $(document).ready(function() {
@@ -66,5 +79,15 @@ $(document).ready(function() {
         $('#emptycart').bind('click', cartWidgetEmpty);
         $('#updatecart').bind('click', cartWidgetUpdate)
         $('.cartwidget').bind('submit', cartWidgetSubmit);
+        var keyupdelay;
+        $('input.cart-widget-quantity').keyup(function(){
+            clearTimeout(keyupdelay);
+            keyupdelay = setTimeout(function() {
+                $('form.cartwidget').submit();
+            }, 300);
+        });
+        $('select.cart-widget-quantity').change(function(){
+            $('form.cartwidget').submit();
+        });
     }
 });

@@ -13,11 +13,10 @@ a.widget-remove {
 }
 
 input.cart-widget-quantity {
-  padding: 0;
+  padding: 1px;
   width: 13px;
 }
 
 #cart-widget-buttons {
-  text-align: center;
   margin-bottom: 5px;
 }

@@ -6,30 +6,32 @@
 {else}
     <h3>Items in cart</h3>
     <table class="table table-condensed">
+    <thead>
         <tr>
-          <th style="text-align: left;">Item</th>
+          <th></th>
           <th>Qty</th>
           <th>Price</th>
           <th>Total</th>
           <th>&nbsp;</th>
         </tr>
+    </thead>
         {foreach from=$items key=k item=i}
-        <tr>
+        <tr id="row_{$i.id}" >
           <td class="item"><strong>{$i.name}</strong></td>
           <td class="quantity" style="white-space: nowrap">
-            <input id="quantity_{$i.id}" class="cart-widget-quantity" type="text" value="{$i.quantity}" size="2" onfocus="showUpdate()" name="quantity[{$i.id}]"/>
+            <input id="quantity[{$i.id}]" class="form-control cart-quantity" type="number" value="{$i.quantity}" size="2" name="quantity[{$i.id}]" min="{if $i.min_quantity}{$i.min_quantity}{else}1{/if}"{if $i.max_quantity} max="{$i.max_quantity}"{/if}/>
             <input id="remove_{$i.id}" type="checkbox" style="float:left; display: none;" value="remove" name="remove[{$i.id}]" />
            </td>
           <td class="price">{if $i.netprice != $i.price}<strike>{$i.price|string_format:"%01.2f"}</strike> {$i.netprice|string_format:"%01.2f"}{else}{$i.netprice|string_format:"%01.2f"}{/if}</td>
-          <td class="price">{$i.linetotal|string_format:"%01.2f"}</td>
+          <td class="price cart-linetotal"><span>{$i.linetotal|string_format:"%01.2f"}</span></td>
           <td><a href="cart/remove/{$i.code}" class="widget-remove" onclick="$('#remove_{$i.id}').attr('checked', 'checked'); $('form.cartwidget').trigger('submit'); return false;" title="Remove">x</a></td>
         </tr>
       {/foreach}
     </table>
-    <div id="cart-widget-total">
-        Total: {$currencysymbol}{$total|string_format:"%01.2f"}{if $freight}<br />
-        Freight: {$currencysymbol}{$freight|string_format:"%01.2f"}{/if}
-    </div>
+    {if $freight}<div id="cart-freight" class="clearfix">Freight: {$currencysymbol}<span>{$freight|string_format:"%01.2f"}</span></div>
+    {/if}
+    <div id="cart-total" class="clearfix">Total: {$currencysymbol}<span>{$total|string_format:"%01.2f"}</span></div>
+    
 {if $usediscount}
     <div id="widget_discount" class="form-controls">
         <label>Discount Code?</label>
@@ -56,5 +58,6 @@
       <a id="checkoutbutton" class="btn btn-primary move-up" href="{$SITEURL}/cart/">##Checkout##</a>
     </div>
 {/if}
+<input type="hidden" name="cart-item-total" id="cart-item-total" value="{count($items);}" />
 </form>
 {if !$json}</div>{/if}

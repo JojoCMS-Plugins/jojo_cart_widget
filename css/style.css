@@ -12,11 +12,6 @@ a.widget-remove {
   font-weight: bold;
 }
 
-input.cart-widget-quantity {
-  padding: 1px;
-  width: 13px;
-}
-
 #cart-widget-buttons {
   margin-bottom: 5px;
 }

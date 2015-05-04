@@ -65,9 +65,18 @@ function jojo_cart_widget_update(data) {
                 $('#emptycart').bind('click', cartWidgetEmpty);
                 $('#updatecart').bind('click', cartWidgetUpdate);
                 $("#updatelink").hide();
-                $('input.cart-widget-quantity').keyup(function(){ $('form.cartwidget').submit(); });
-                $('select.cart-widget-quantity').change(function(){ $('form.cartwidget').submit(); });
- 
+                  $('input.cart-quantity').bind('keyup input mousewheel', function(){
+                    var rowid = $(this).closest('tr').attr('id');
+                    var id = $(this).attr('id');
+                    var code = id.replace(/quantity\[(.*?)\]/ig, "$1");
+                    $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid}, change_quantity_callback);
+                  });
+                  $('select.cart-quantity').change(function(){
+                    var rowid = $(this).closest('tr').attr('id');
+                    var id = $(this).attr('id');
+                    var code = id.replace(/quantity\[(.*?)\]/ig, "$1");
+                    $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid}, change_quantity_callback);
+                  });
             },
             "json"
     );
@@ -79,15 +88,6 @@ $(document).ready(function() {
         $('#emptycart').bind('click', cartWidgetEmpty);
         $('#updatecart').bind('click', cartWidgetUpdate)
         $('.cartwidget').bind('submit', cartWidgetSubmit);
-        var keyupdelay;
-        $('input.cart-widget-quantity').keyup(function(){
-            clearTimeout(keyupdelay);
-            keyupdelay = setTimeout(function() {
-                $('form.cartwidget').submit();
-            }, 300);
-        });
-        $('select.cart-widget-quantity').change(function(){
-            $('form.cartwidget').submit();
-        });
+
     }
 });

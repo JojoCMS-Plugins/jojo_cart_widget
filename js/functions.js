@@ -51,7 +51,7 @@ function jojo_cart_widget_update(data) {
                     $.post('json/cart_item_total_update.php', data,
                         function(data) {
                                 $('.cartItemTotal').html(data[0]);
-                                $('.cartTotal').html(data[1]);
+                                $('#cart-total span').html(data[1]);
                         },
                         "json"
                     );

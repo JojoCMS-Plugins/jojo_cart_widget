@@ -88,6 +88,6 @@ $(document).ready(function() {
         $('#emptycart').bind('click', cartWidgetEmpty);
         $('#updatecart').bind('click', cartWidgetUpdate)
         $('.cartwidget').bind('submit', cartWidgetSubmit);
-
+        cartWidgetUpdate();
     }
 });

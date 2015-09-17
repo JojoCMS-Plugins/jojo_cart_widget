@@ -25,12 +25,25 @@
         </div>
     </div>
   {/foreach}
-   <div class="row">
-        <div class="col-sm-11"  id="cart-freight">##Freight## {if $order.freight}(##based on current delivery address##): {$order.currency_symbol|default:' '}<span>{$order.freight|string_format:"%01.2f"}</span>{else}(##to be calculated##){/if}
+    {if $order.fixedorder}
+    <div class="row">
+        <div class="col-sm-11" id="cart-fixedorder">##Code Discount##: -{$order.currency_symbol|default:' '}<span>{$order.fixedorder|string_format:"%01.2f"}</span></div>
+    </div>
+    {/if}{if $pointsused}
+    <div class="row">
+        <div class="col-sm-11" id="cart-points">##Points Discount##: -{$order.currency_symbol|default:' '}<span>{$pointsdiscount|string_format:"%01.2f"}<br /></span></div>
+    </div>
+    {/if}
+    <div class="row">
+        <div class="col-sm-11"  id="cart-subtotal">##Sub-total##: {$order.currency_symbol|default:' '}<span>{$order.subtotal|string_format:"%01.2f"}</span></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-11"  id="cart-freight">##Freight## {if $order.freight}: {$order.currency_symbol|default:' '}<span>{$order.freight|string_format:"%01.2f"}</span>{elseif $order.freight!==false}<span>{$OPTIONS.freight_description}</span>{else}##to be calculated##{/if}
        {if $order.surcharge}<div id="cart-surcharge">##{$order.surchargedescription}##: {$order.currency_symbol|default:' '}<span>{$order.surcharge|string_format:"%01.2f"}</span></div>
        {/if}
        </div>
    </div>
+
     <div class="row">
         <div class="col-sm-11 cart-total">
          ##Total##: {$order.currency|default:$OPTIONS.cart_default_currency}{$order.currency_symbol|default:' '}<span>{$order.amount|string_format:"%01.2f"}</span>
@@ -41,15 +54,46 @@
         </div>
     </div>
     
-{if $usediscount}
-    <div id="widget_discount" class="form-controls">
-        <label>Discount Code?</label>
-       <div class="input-append">
-        <input class="text inline" name='discountcode' type="text" size="6" value="{if $discount.code != ''}{$discount.code}{/if}"/>
-        <button name="discount" class="btn btn-default" onclick="document.activeElement=this">Apply</button>
+    {if $usediscount}
+    <div class="row">
+        <div class="col-sm-4">
+            <div id="cart-discountcode">
+                <label for="discountCode">Discount Code:</label>
+                <div class="input-group">
+                    <input id="discountCode" class="form-control" type="text" value="{if $discount.code != ''}{$discount.code}{/if}" name="discountCode" size="10">
+                    <span class="input-group-btn"><a id="applyDiscount" class="btn btn-default" href="#">Apply</a></span>
+                </div>
+            </div>
         </div>
     </div>
-{/if}
+    {/if}
+    {if $pointsavailable}
+    <div class="row">
+      <div class="col-sm-4">
+            <div id="cart-points">
+                <label for="points">Your Points</label>
+                <div class="input-group">
+                    <span class="note">Use </span>
+                    <input class="form-control" type="text" size="10" name="points" id="points" value="{if $pointsused!==false}{$pointsused}{elseif $pointsavailable}{$pointsavailable}{/if}" /><span class="note"> out of {$pointsavailable}</span>
+                    <span class="input-group-btn"><input type="submit" name="applyPoints" id="applyPoints" value="Apply" class="btn btn-default"/></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+    
+    {if $OPTIONS.cart_free_gift_wrap == 'yes'}
+    <div id="cart-giftwrap" class="checkbox">
+        <label for="giftwrap"><input type="checkbox" name="giftwrap" id="giftwrap" value="1" {if $order.giftwrap==true}checked="checked"{/if} /> ##This is a gift##</label>
+    </div>
+   {if $OPTIONS.cart_free_gift_message == 'yes'}
+   <div id="giftmessagefield" class="form-fieldset form-group"{if $order.giftwrap==false} style="display: none;"{/if}>
+        <label for="gift_message">Message</label>
+        <textarea class="form-control input textarea" rows="4" cols="40" name="giftmessage" id="giftmessage">{if $order.giftmessage}{$order.giftmessage}{/if}</textarea>
+    </div>
+    {/if}
+    {/if}
+
 {if $errors}
     <div class="errors">
     <ul>

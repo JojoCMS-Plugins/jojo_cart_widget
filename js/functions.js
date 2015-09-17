@@ -67,7 +67,13 @@ function jojo_cart_widget_update(data) {
                     var code = id.replace(/quantity\[(.*?)\]/ig, "$1");
                     $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid}, change_quantity_callback);
                 });
-            },
+               $('#applyDiscount').bind('click', function(){
+                var code = $('#discountCode').val();
+                $.getJSON('json/jojo_cart_change_quantity.php', {discount: code}, change_quantity_callback);
+                $('#updatecart').click();
+                return false;
+              });
+           },
             "json"
     );
     if ($('.cartItemTotal').length>0) {

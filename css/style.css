@@ -1,6 +1,5 @@
 .shoppingcartwidget {
-    padding-top: 30px;
-    padding-bottom: 15px;
+    padding: 30px 15px 15px;
     .cartWidgetClose {
         position: absolute;
         top: 5px;

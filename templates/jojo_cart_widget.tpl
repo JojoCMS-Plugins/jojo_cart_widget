@@ -1,4 +1,4 @@
-{if !$json}<div class="shoppingcart shoppingcartwidget container">{/if}
+{if !$json}<div class="shoppingcart shoppingcartwidget">{/if}
 <a class="close cartWidgetClose" href="#">&times;</a>
 <form class="cartwidget" method="post" action="{$SITEURL}/cart/">
 {if $cartisempty}

@@ -51,6 +51,7 @@ class jojo_plugin_jojo_cart_widget extends JOJO_Plugin
             $smarty->assign('freight', call_user_func(array(Jojo_Cart_Class, 'getFreight')));
 
             $smarty->assign('items', $cart->items);
+            $smarty->assign('order', $cart->order);
             $currency = call_user_func(array(Jojo_Cart_Class, 'getCartCurrency'));
             $smarty->assign('currency', $currency);
             $smarty->assign('currencysymbol', call_user_func(array(Jojo_Cart_Class, 'getCurrencySymbol'), $currency));

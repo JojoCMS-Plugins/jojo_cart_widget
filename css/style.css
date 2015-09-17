@@ -1,17 +1,22 @@
-a.widget-remove {
-  line-height: 14px;
-  color: red;
-  font-size: 115%;
-  margin: 0;
+.shoppingcartwidget {
+    padding-top: 30px;
+    padding-bottom: 15px;
+    .cartWidgetClose {
+        position: absolute;
+        top: 5px;
+        left: 15px;
+    }
+    a.widget-remove {
+      color: red;
+      font-size: 115%;
+    }
+
 }
 
-#cart-widget-total {
-  text-align: right;
-  padding-right: 5px;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
 
-#cart-widget-buttons {
-  margin-bottom: 5px;
+/* Small devices (tablets, 768px and up) */
+@media (min-width: @screen-sm-min) {
+    .shoppingcartwidget {
+        padding-top: 15px;
+    }
 }

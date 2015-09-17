@@ -23,16 +23,6 @@ function cartWidgetSubmit(e) {
 
 }
 
-function cartWidgetEmpty(e) {
-        $(this).html('Emptying...');
-        data = $('.cartwidget input, .cartwidget select').serializeArray();
-        data[data.length] = {name: 'empty', value: "Empty cart" };
-        /* Get the page in the background the reload this page */
-        jojo_cart_widget_update(data);
-        /* Don't go to the cart page */
-        return false;
-}
-
 function cartWidgetUpdate(e) {
         $(this).html('Updating cart...');
         data = $('.cartwidget input, .cartwidget select').serializeArray();
@@ -43,51 +33,60 @@ function cartWidgetUpdate(e) {
         return false;
 }
 
+function cartWidgetToggle() {
+        $('.shoppingcartwidget').toggleClass('open');
+        return false;
+};
+
+function cartWidgetClose() {
+        $('.shoppingcartwidget').removeClass('open');
+        return false;
+};
+
 function jojo_cart_widget_update(data) {
-    $('.shoppingcart').html('<img src="images/ajax-loader.gif" alt="Updating"/>');
+    $('.shoppingcartwidget').html('<img src="images/ajax-loader.gif" alt="Updating"/>');
     $.post('json/jojo_cart_widget.php', data,
             function(data) {
-               if ($('.cartItemTotal').length>0) {
-                    $.post('json/cart_item_total_update.php', data,
-                        function(data) {
-                                $('.cartItemTotal').html(data[0]);
-                                $('#cart-total span').html(data[1]);
-                        },
-                        "json"
-                    );
-                    
-                }
-                if ($('.shoppingcart').length>0) {
-                    $('.shoppingcart').html(data);
+                if ($('.shoppingcartwidget').length>0) {
+                    $('.shoppingcartwidget').html(data);
                 }
                 $('.cartwidget').unbind('submit');
                 $('.cartwidget').bind('submit', cartWidgetSubmit);
-                $('#emptycart').bind('click', cartWidgetEmpty);
                 $('#updatecart').bind('click', cartWidgetUpdate);
+                $('.cartWidgetClose').bind('click', cartWidgetClose);
                 $("#updatelink").hide();
-                  $('input.cart-quantity').bind('keyup input mousewheel', function(){
+                $('input.cart-quantity').bind('keyup input mousewheel', function(){
                     var rowid = $(this).closest('tr').attr('id');
                     var id = $(this).attr('id');
                     var code = id.replace(/quantity\[(.*?)\]/ig, "$1");
                     $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid}, change_quantity_callback);
-                  });
-                  $('select.cart-quantity').change(function(){
+                });
+                $('select.cart-quantity').change(function(){
                     var rowid = $(this).closest('tr').attr('id');
                     var id = $(this).attr('id');
                     var code = id.replace(/quantity\[(.*?)\]/ig, "$1");
                     $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid}, change_quantity_callback);
-                  });
+                });
             },
             "json"
     );
+    if ($('.cartItemTotal').length>0) {
+        $.post('json/cart_item_total_update.php', data,
+            function(data) {
+                    $('.cartItemTotal').html(data[0]);
+                    $('.cart-total span').html(data[1]);
+            },
+            "json"
+        );
+    
+    }
 }
 
+
 $(document).ready(function() {
-    if ($('.shoppingcart')) {
-        $("#updatelink").hide();
-        $('#emptycart').bind('click', cartWidgetEmpty);
-        $('#updatecart').bind('click', cartWidgetUpdate)
-        $('.cartwidget').bind('submit', cartWidgetSubmit);
-        cartWidgetUpdate();
+    if ($('.shoppingcartwidget')) {
+        $('.cartWidgetToggle').bind('click', cartWidgetToggle);
+        $('#updatecart').bind('click', cartWidgetUpdate);
+        $('#updatecart').click();
     }
 });

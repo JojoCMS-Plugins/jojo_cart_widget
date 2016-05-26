@@ -49,50 +49,62 @@ function jojo_cart_widget_update(data) {
             function(data) {
                 if ($('.shoppingcartwidget').length>0) {
                     $('.shoppingcartwidget').html(data);
+                    $.getJSON('json/jojo_cart_change_quantity.php', '', change_quantity_callback);
                 }
                 $('.cartwidget').unbind('submit');
                 $('.cartwidget').bind('submit', cartWidgetSubmit);
                 $('#updatecart').bind('click', cartWidgetUpdate);
                 $('.cartWidgetClose').bind('click', cartWidgetClose);
                 $("#updatelink").hide();
-                $('input.cart-quantity').bind('keyup input mousewheel', function(){
-                    var rowid = $(this).closest('tr').attr('id');
+                $('.shoppingcartwidget input.cart-quantity').bind('keyup input mousewheel', function(){
+                    var rowid = $(this).closest('div.row').attr('id');
                     var id = $(this).attr('id');
                     var code = id.replace(/quantity\[(.*?)\]/ig, "$1");
-                    $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid}, change_quantity_callback);
+                    var discountcode = $('#discountCode').val();
+                   $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid, discount: discountcode}, change_quantity_callback);
                 });
-                $('select.cart-quantity').change(function(){
-                    var rowid = $(this).closest('tr').attr('id');
+                $('.shoppingcartwidget select.cart-quantity').change(function(){
+                    var rowid = $(this).closest('div.row').attr('id');
                     var id = $(this).attr('id');
                     var code = id.replace(/quantity\[(.*?)\]/ig, "$1");
-                    $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid}, change_quantity_callback);
+                    var discountcode = $('#discountCode').val();
+                    $.getJSON('json/jojo_cart_change_quantity.php', {qty: $(this).val(), code: code, rowid: rowid, discount: discountcode}, change_quantity_callback);
                 });
-               $('#applyDiscount').bind('click', function(){
-                var code = $('#discountCode').val();
-                $.getJSON('json/jojo_cart_change_quantity.php', {discount: code}, change_quantity_callback);
-                $('#updatecart').click();
+                $('.shoppingcartwidget .cart-remove a').bind('click', function(e){
+                    e.preventDefault();
+                    var rowid = $(this).closest('div.row').attr('id');
+                    var discountcode = $('#discountCode').val();
+                    var code = $(this).attr('data-id');
+                    $.getJSON('json/jojo_cart_change_quantity.php', {qty: 0, code: code, rowid: rowid, discount: discountcode}, change_quantity_callback);
+                });
+                $('.shoppingcartwidget #applyDiscount').bind('click', function(){
+                    var discountcode = $('#discountCode').val();
+                    $.getJSON('json/jojo_cart_change_quantity.php', {discount: discountcode}, change_quantity_callback);
+                });
+                $('.shoppingcartwidget #giftwrap').bind('click', function(){
+                    $('.shoppingcartwidget #giftmessagefield').toggle();
+                    if ($(this).is(':checked')) {
+                        $(this).after('<input type="hidden" name="nogiftwrap" id="nogiftwrap" value="1"/>');
+                        var message = $('#giftmessage').val();
+                        $.getJSON('json/jojo_cart_change_quantity.php', {giftwrap: true, giftmessage: message}, change_quantity_callback);
+                    } else {
+                        $('.shoppingcartwidget #nogiftwrap').remove();
+                        $.getJSON('json/jojo_cart_change_quantity.php', {nogiftwrap: true}, change_quantity_callback);
+                    }
+                });
                 return false;
-              });
            },
             "json"
     );
-    if ($('.cartItemTotal').length>0) {
-        $.post('json/cart_item_total_update.php', data,
-            function(data) {
-                    $('.cartItemTotal').html(data[0]);
-                    $('.cart-total span').html(data[1]);
-            },
-            "json"
-        );
-    
-    }
 }
-
 
 $(document).ready(function() {
     if ($('.shoppingcartwidget')) {
         $('.cartWidgetToggle').bind('click', cartWidgetToggle);
         $('#updatecart').bind('click', cartWidgetUpdate);
         $('#updatecart').click();
+    }
+    if ($('.cartItemTotal').length>0) {
+        $.getJSON('json/jojo_cart_change_quantity.php', '', change_quantity_callback);
     }
 });

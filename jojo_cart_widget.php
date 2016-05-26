@@ -35,6 +35,9 @@ class jojo_plugin_jojo_cart_widget extends JOJO_Plugin
         global $smarty;
 
         /* Initialize cart object */
+        if ($cartpage = Jojo::selectRow("SELECT pg_body FROM {page} WHERE pg_link='jojo_plugin_jojo_cart'")) {
+            $smarty->assign('widget_body', $cartpage['pg_body']);
+        }
         $cart = call_user_func(array(Jojo_Cart_Class, 'getCart'));
         $cart->items = Jojo::applyFilter('jojo_cart_sort', $cart->items);
 
